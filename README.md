@@ -5,7 +5,6 @@
 
 ### 1.安装依赖
 ```bash
-  npm install -S jsdom
   pip install PyExecJS
   pip install requests
 ```
