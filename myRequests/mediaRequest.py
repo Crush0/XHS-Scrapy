@@ -88,7 +88,8 @@ def image_parse(user_id, note_id_, note_card, args):
     index = 0
     save_path = os.path.join(args.output, user_id, 'images')
     for image in image_list:
-        url = image['url']
+        trace_id = image['trace_id']
+        url = f"https://sns-img-qc.xhscdn.com/{trace_id}"
         imageU.downloadFromUrl(url, save_path, f'{note_card["title"].replace(" ","")}-{index}.png')
         index += 1
     print(f'{note_id_}下载完成')
