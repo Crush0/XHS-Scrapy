@@ -19,13 +19,12 @@ if not os.path.exists(COMMON_JS):
 js_body = open(JS_FILE, 'r').read()
 common_js_body = open(COMMON_JS, 'r').read()
 mcr_js_body = open(MCR_FILE, 'r').read()
-node_modules = os.path.join(dir_name, 'node_modules')
 index = 1
 
 
 def sign(url, data):
     c = execjs.get()
-    ctx = c.compile(js_body, cwd=node_modules)
+    ctx = c.compile(js_body)
     if data == {}:
         result = ctx.eval(f'sign("{url}")')
     else:
