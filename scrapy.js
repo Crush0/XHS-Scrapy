@@ -78,7 +78,7 @@ function parseNotes() {
                         const { videoId } = media;
                         const { originVideoKey } = consumer;
                         await downloadUrlFile(
-                            `http://sns-video-bd.xhscdn.com/${originVideoKey}`,
+                            `https://sns-video-bd.xhscdn.com/${originVideoKey}`,
                             `${index_}-${title}`,
                             videoId,
                             "mp4"
