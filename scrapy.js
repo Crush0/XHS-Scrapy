@@ -1,5 +1,6 @@
-var FETCH_VIDEO = false;
+var FETCH_VIDEO = true;
 var FETCH_IMAGE = true;
+
 (function requireScript() {
     const ZIPJSscriptTag = document.createElement("script");
     ZIPJSscriptTag.src =
@@ -13,15 +14,26 @@ var FETCH_IMAGE = true;
 var zip = null;
 
 (function getJSZIP() {
-    setInterval(() => {
+    const timer = setInterval(() => {
         if (!zip) {
             if (window.JSZip) {
                 zip = new JSZip();
+                clearInterval(timer);
             }
         }
     });
 })();
 var userId = null;
+var chunk_index = 0;
+
+async function chunkCheckAndDownload(){
+    if(Object.keys(zip.files).length > 20){
+        await zipSave()
+        zip = new JSZip();
+        chunk_index++;
+    }
+}
+
 // 滚动到最底部以加载所有
 (function scrollToBottom() {
     function smoothscroll() {
@@ -78,7 +90,7 @@ function parseNotes() {
                         const { videoId } = media;
                         const { originVideoKey } = consumer;
                         await downloadUrlFile(
-                            `https://sns-video-bd.xhscdn.com/${originVideoKey}`,
+                            `http://sns-video-bd.xhscdn.com/${originVideoKey}`,
                             `${index_}-${title}`,
                             videoId,
                             "mp4"
@@ -103,6 +115,7 @@ function parseNotes() {
                     continue;
                 }
                 index_ ++;
+                await chunkCheckAndDownload()
             }
             resolve();
         } catch (err) {
@@ -127,13 +140,9 @@ function downloadUrlFile(url, noteId, fileId, type) {
                     throw new Error("fail");
                 }
             };
-            xhr.onerror = () => {
-                console.log(`title=${noteId}下载失败`);
-                resolve();
-            }
             xhr.send();
         } catch (err) {
-            console.log(`title=${noteId}下载失败,${err}`);
+            console.log(`title=${noteId}下载失败,${ex}`);
             resolve();
         }
     });
@@ -153,9 +162,12 @@ function waitJS() {
 }
 
 function zipSave(){
-    zip.generateAsync({type:"blob"}).then(function (content) {
-        saveAs(content, `${userId ?? "result"}.zip`);
-    });
+    return new Promise((resolve, reject) => {
+        zip.generateAsync({type:"blob"}).then(function (content) {
+            saveAs(content, `${userId ? `${userId}-${chunk_index}`:`result-${chunk_index}`}.zip`);
+            resolve()
+        });
+    })
 }
 
 waitJS().then(() => {
