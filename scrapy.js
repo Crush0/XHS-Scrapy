@@ -67,7 +67,7 @@ async function chunkCheckAndDownload(){
                 }
             }, 200);
         } catch (err) {
-            console.log('无法滚动到底部');
+            console.error('无法滚动到底部');
             reslove();
         }
     });
@@ -111,7 +111,7 @@ function parseNotes() {
                         }
                     }
                 } catch (ex) {
-                    console.log(`title=${title}下载失败,${ex}`);
+                    console.error(`title=${title}下载失败,${ex}`);
                     continue;
                 }
                 index_ ++;
@@ -119,7 +119,7 @@ function parseNotes() {
             }
             resolve();
         } catch (err) {
-            console.log('note解析失败');
+            console.error('note解析失败');
             reject(err);
         }
     });
@@ -146,7 +146,7 @@ function downloadUrlFile(url, noteId, fileId, type) {
             }
             xhr.send();
         } catch (err) {
-            console.log(`title=${noteId}下载失败,${err}`);
+            console.error(`title=${noteId}下载失败,${err}`);
             resolve();
         }
     });
