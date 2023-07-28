@@ -127,9 +127,13 @@ function downloadUrlFile(url, noteId, fileId, type) {
                     throw new Error("fail");
                 }
             };
+            xhr.onerror = () => {
+                console.log(`title=${noteId}下载失败`);
+                resolve();
+            }
             xhr.send();
         } catch (err) {
-            console.log(`title=${noteId}下载失败,${ex}`);
+            console.log(`title=${noteId}下载失败,${err}`);
             resolve();
         }
     });
