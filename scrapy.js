@@ -1,4 +1,4 @@
-var FETCH_VIDEO = true;
+var FETCH_VIDEO = false;
 var FETCH_IMAGE = true;
 
 (function requireScript() {
