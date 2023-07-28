@@ -90,7 +90,7 @@ function parseNotes() {
                         const { videoId } = media;
                         const { originVideoKey } = consumer;
                         await downloadUrlFile(
-                            `http://sns-video-bd.xhscdn.com/${originVideoKey}`,
+                            `https://sns-video-bd.xhscdn.com/${originVideoKey}`,
                             `${index_}-${title}`,
                             videoId,
                             "mp4"
@@ -140,9 +140,13 @@ function downloadUrlFile(url, noteId, fileId, type) {
                     throw new Error("fail");
                 }
             };
+            xhr.onerror = (err) => {
+                console.error(`title=${noteId}下载失败,${err}`);
+                resolve();
+            }
             xhr.send();
         } catch (err) {
-            console.log(`title=${noteId}下载失败,${ex}`);
+            console.log(`title=${noteId}下载失败,${err}`);
             resolve();
         }
     });
